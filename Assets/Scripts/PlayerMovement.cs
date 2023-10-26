@@ -27,11 +27,13 @@ public class PlayerMovement : MonoBehaviour
 
     // Current turn information
     int _currentPlayer = 0;
+    int _actionsLeft = 4;
 
     // Start is called before the first frame update
     void Start()
     {
         _board.InitCityPositions();
+        _board.InitResearch();
     }
 
     void CheckWin()
@@ -98,6 +100,7 @@ public class PlayerMovement : MonoBehaviour
                 if (_turnStarted)
                 {
                     _turnStarted = false;
+                    _actionsLeft = 4;
 
                     if (_currentPlayer == 0)
                     {

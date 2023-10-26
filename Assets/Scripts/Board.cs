@@ -27,4 +27,20 @@ public class Board : MonoBehaviour
             _cityPositions[i] = new Vector2(_cities[i].transform.position.x, _cities[i].transform.position.y);
         }
     }
+
+    public void InitResearch()
+    {
+        for (int i = 0; i <= 47; i++)
+        {
+            if (_cities[i].gameObject.name != "Atlanta")
+            {
+                _cities[i].GetComponent<CityManager>().research = false;
+                _cities[i].transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
+            }
+            else
+            {
+                _cities[i].GetComponent<CityManager>().research = true;
+            }
+        }
+    }
 }
