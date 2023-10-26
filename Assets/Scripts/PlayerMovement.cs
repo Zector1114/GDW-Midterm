@@ -65,17 +65,40 @@ public class PlayerMovement : MonoBehaviour
 
                 if (hit.collider != null)
                 {
-                    for (int i = 0; i < _board.GetCities().Count; i++)
+                    if (Mathf.Abs(hit.collider.gameObject.transform.position.x - _board.transform.GetChild(0).transform.position.x) <= 0.1f && Mathf.Abs(hit.collider.gameObject.transform.position.y - _board.transform.GetChild(0).transform.position.y) <= 0.1f)
                     {
-                        if(Mathf.Abs(hit.collider.gameObject.transform.position.x - _board.GetCities()[i].transform.position.x) <= 0.1f && Mathf.Abs(hit.collider.gameObject.transform.position.y - _board.GetCities()[i].transform.position.y) <= 0.1f)
+                        if (!_isMoving)
                         {
-                            for (int j = 0; j < _board.GetCities()[_players[_currentPlayer].GetCurrentCity()].GetComponent<ConnectedLocations>().GetLocations().Length; j++)
+                            _turnStarted = false;
+                            _actionsLeft = 4;
+                            textField.text = "Actions Left: " + _actionsLeft.ToString();
+
+                            if (_currentPlayer == 0)
                             {
-                                if (Mathf.Abs(hit.collider.gameObject.transform.position.x - _board.GetCities()[_players[_currentPlayer].GetCurrentCity()].GetComponent<ConnectedLocations>().GetLocations()[j].transform.position.x) <= 0.1f && Mathf.Abs(hit.collider.gameObject.transform.position.y - _board.GetCities()[_players[_currentPlayer].GetCurrentCity()].GetComponent<ConnectedLocations>().GetLocations()[j].transform.position.y) <= 0.1f)
+                                _currentPlayer = 1;
+                            }
+                            else
+                            {
+                                _currentPlayer = 0;
+                            }
+                        }
+                    }
+                    else if (_actionsLeft > 0)
+                    {
+                        for (int i = 0; i < _board.GetCities().Count; i++)
+                        {
+                            if (Mathf.Abs(hit.collider.gameObject.transform.position.x - _board.GetCities()[i].transform.position.x) <= 0.1f && Mathf.Abs(hit.collider.gameObject.transform.position.y - _board.GetCities()[i].transform.position.y) <= 0.1f)
+                            {
+                                for (int j = 0; j < _board.GetCities()[_players[_currentPlayer].GetCurrentCity()].GetComponent<ConnectedLocations>().GetLocations().Length; j++)
                                 {
-                                    _players[_currentPlayer].SetCurrentCity(i);
-                                    _nextPos = hit.collider.gameObject.transform.position;
-                                    _turnStarted = true;
+                                    if (Mathf.Abs(hit.collider.gameObject.transform.position.x - _board.GetCities()[_players[_currentPlayer].GetCurrentCity()].GetComponent<ConnectedLocations>().GetLocations()[j].transform.position.x) <= 0.1f && Mathf.Abs(hit.collider.gameObject.transform.position.y - _board.GetCities()[_players[_currentPlayer].GetCurrentCity()].GetComponent<ConnectedLocations>().GetLocations()[j].transform.position.y) <= 0.1f)
+                                    {
+                                        _players[_currentPlayer].SetCurrentCity(i);
+                                        _nextPos = hit.collider.gameObject.transform.position;
+                                        _turnStarted = true;
+                                        _actionsLeft--;
+                                        textField.text = "Actions Left: " + _actionsLeft.ToString();
+                                    }
                                 }
                             }
                         }
@@ -93,7 +116,7 @@ public class PlayerMovement : MonoBehaviour
                 UpdatePosition();
             }
 
-            if (!_isMoving)
+            /*if (!_isMoving)
             {
                 textField.text = "Click a connected city to move to.";
 
@@ -111,7 +134,7 @@ public class PlayerMovement : MonoBehaviour
                         _currentPlayer = 0;
                     }
                 }
-            }
+            }*/
         }
     }
 
