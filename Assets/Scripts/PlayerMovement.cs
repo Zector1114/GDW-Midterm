@@ -28,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
     // Current turn information
     int _currentPlayer = 0;
     int _actionsLeft = 4;
+    int cubeArrayNum;
 
     // Start is called before the first frame update
     void Start()
@@ -85,19 +86,46 @@ public class PlayerMovement : MonoBehaviour
                     }
                     else if (_actionsLeft > 0)
                     {
-                        for (int i = 0; i < _board.GetCities().Count; i++)
+                        if (Mathf.Abs(hit.collider.gameObject.transform.position.x - _board.transform.GetChild(1).transform.position.x) <= 0.1f && Mathf.Abs(hit.collider.gameObject.transform.position.y - _board.transform.GetChild(1).transform.position.y) <= 0.1f)
                         {
-                            if (Mathf.Abs(hit.collider.gameObject.transform.position.x - _board.GetCities()[i].transform.position.x) <= 0.1f && Mathf.Abs(hit.collider.gameObject.transform.position.y - _board.GetCities()[i].transform.position.y) <= 0.1f)
+                            cubeArrayNum = 0;
+
+                            RemoveCube();
+                        }
+                        else if (Mathf.Abs(hit.collider.gameObject.transform.position.x - _board.transform.GetChild(2).transform.position.x) <= 0.1f && Mathf.Abs(hit.collider.gameObject.transform.position.y - _board.transform.GetChild(2).transform.position.y) <= 0.1f)
+                        {
+                            cubeArrayNum = 1;
+
+                            RemoveCube();
+                        }
+                        else if (Mathf.Abs(hit.collider.gameObject.transform.position.x - _board.transform.GetChild(3).transform.position.x) <= 0.1f && Mathf.Abs(hit.collider.gameObject.transform.position.y - _board.transform.GetChild(3).transform.position.y) <= 0.1f)
+                        {
+                            cubeArrayNum = 2;
+
+                            RemoveCube();
+                        }
+                        else if (Mathf.Abs(hit.collider.gameObject.transform.position.x - _board.transform.GetChild(4).transform.position.x) <= 0.1f && Mathf.Abs(hit.collider.gameObject.transform.position.y - _board.transform.GetChild(4).transform.position.y) <= 0.1f)
+                        {
+                            cubeArrayNum = 3;
+
+                            RemoveCube();
+                        }
+                        else
+                        {
+                            for (int i = 0; i < _board.GetCities().Count; i++)
                             {
-                                for (int j = 0; j < _board.GetCities()[_players[_currentPlayer].GetCurrentCity()].GetComponent<ConnectedLocations>().GetLocations().Length; j++)
+                                if (Mathf.Abs(hit.collider.gameObject.transform.position.x - _board.GetCities()[i].transform.position.x) <= 0.1f && Mathf.Abs(hit.collider.gameObject.transform.position.y - _board.GetCities()[i].transform.position.y) <= 0.1f)
                                 {
-                                    if (Mathf.Abs(hit.collider.gameObject.transform.position.x - _board.GetCities()[_players[_currentPlayer].GetCurrentCity()].GetComponent<ConnectedLocations>().GetLocations()[j].transform.position.x) <= 0.1f && Mathf.Abs(hit.collider.gameObject.transform.position.y - _board.GetCities()[_players[_currentPlayer].GetCurrentCity()].GetComponent<ConnectedLocations>().GetLocations()[j].transform.position.y) <= 0.1f)
+                                    for (int j = 0; j < _board.GetCities()[_players[_currentPlayer].GetCurrentCity()].GetComponent<ConnectedLocations>().GetLocations().Length; j++)
                                     {
-                                        _players[_currentPlayer].SetCurrentCity(i);
-                                        _nextPos = hit.collider.gameObject.transform.position;
-                                        _turnStarted = true;
-                                        _actionsLeft--;
-                                        textField.text = "Actions Left: " + _actionsLeft.ToString();
+                                        if (Mathf.Abs(hit.collider.gameObject.transform.position.x - _board.GetCities()[_players[_currentPlayer].GetCurrentCity()].GetComponent<ConnectedLocations>().GetLocations()[j].transform.position.x) <= 0.1f && Mathf.Abs(hit.collider.gameObject.transform.position.y - _board.GetCities()[_players[_currentPlayer].GetCurrentCity()].GetComponent<ConnectedLocations>().GetLocations()[j].transform.position.y) <= 0.1f)
+                                        {
+                                            _players[_currentPlayer].SetCurrentCity(i);
+                                            _nextPos = hit.collider.gameObject.transform.position;
+                                            _turnStarted = true;
+
+                                            UpdateActions();
+                                        }
                                     }
                                 }
                             }
@@ -115,26 +143,6 @@ public class PlayerMovement : MonoBehaviour
             {
                 UpdatePosition();
             }
-
-            /*if (!_isMoving)
-            {
-                textField.text = "Click a connected city to move to.";
-
-                if (_turnStarted)
-                {
-                    _turnStarted = false;
-                    _actionsLeft = 4;
-
-                    if (_currentPlayer == 0)
-                    {
-                        _currentPlayer = 1;
-                    }
-                    else
-                    {
-                        _currentPlayer = 0;
-                    }
-                }
-            }*/
         }
     }
 
@@ -160,5 +168,19 @@ public class PlayerMovement : MonoBehaviour
     {
         _totalTime = (_nextPos - _currentPos / _speed).magnitude;
         _isMoving = true;
+    }
+
+    void RemoveCube()
+    {
+        if (_board.GetCities()[_players[_currentPlayer].GetCurrentCity()].GetComponent<CityManager>().MinusCube(cubeArrayNum) == true)
+        {
+            UpdateActions();
+        }
+    }
+
+    void UpdateActions()
+    {
+        _actionsLeft--;
+        textField.text = "Actions Left: " + _actionsLeft.ToString();
     }
 }

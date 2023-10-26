@@ -6,45 +6,39 @@ using UnityEngine.UI;
 public class CityManager : MonoBehaviour
 {
     public bool research = false;
-    [SerializeField] private int yellowCube = 0;
-    [SerializeField] private int redCube = 0;
-    [SerializeField] private int blueCube = 0;
-    [SerializeField] private int blackCube = 0;
+    [SerializeField] private int[] yrbbCubes = new int[4] { 0, 0, 0, 0 };
     [SerializeField] private Text yellowText;
     [SerializeField] private Text redText;
     [SerializeField] private Text blueText;
     [SerializeField] private Text blackText;
 
+    bool wasCubeRemoved;
+
     // Update is called once per frame
     void Update()
     {
-
+        yellowText.text = yrbbCubes[0].ToString();
+        redText.text = yrbbCubes[1].ToString();
+        blueText.text = yrbbCubes[2].ToString();
+        blackText.text = yrbbCubes[3].ToString();
     }
 
-    void ChangeCube(bool moreCube, int[] newCubes)
+    public bool MinusCube(int cubeArrPos)
     {
-        if (moreCube)
+        if (yrbbCubes[cubeArrPos] > 0)
         {
-            yellowCube += newCubes[0];
-            redCube += newCubes[1];
-            blueCube += newCubes[2];
-            blackCube += newCubes[3];
+            yrbbCubes[cubeArrPos]--;
+            wasCubeRemoved = true;
         }
-        else if (!moreCube)
+        else
         {
-            yellowCube -= newCubes[0];
-            redCube -= newCubes[1];
-            blueCube -= newCubes[2];
-            blackCube -= newCubes[3];
+            wasCubeRemoved = false;
         }
 
-        yellowText.text = yellowCube.ToString();
-        redText.text = redCube.ToString();
-        blueText.text = blueCube.ToString();
-        blackText.text = blackCube.ToString();
+        return wasCubeRemoved;
     }
 
-    void NewResearch()
+    public void NewResearch()
     {
 
     }
