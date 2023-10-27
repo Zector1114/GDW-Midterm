@@ -32,7 +32,7 @@ public class Board : MonoBehaviour
     {
         for (int i = 0; i <= 47; i++)
         {
-            if (_cities[i].gameObject.name != "Atlanta")
+            if (_cities[i].gameObject.name != _cities[12].gameObject.name)
             {
                 _cities[i].GetComponent<CityManager>().research = false;
                 _cities[i].transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
