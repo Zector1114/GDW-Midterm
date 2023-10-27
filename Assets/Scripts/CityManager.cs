@@ -14,8 +14,7 @@ public class CityManager : MonoBehaviour
 
     bool wasCubeRemoved;
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
         yellowText.text = yrbbCubes[0].ToString();
         redText.text = yrbbCubes[1].ToString();
@@ -23,9 +22,14 @@ public class CityManager : MonoBehaviour
         blackText.text = yrbbCubes[3].ToString();
     }
 
-    public bool MinusCube(int cubeArrPos)
+    public bool MinusCube(int cubeArrPos, int playerNum)
     {
-        if (yrbbCubes[cubeArrPos] > 0)
+        if (playerNum == 1 && yrbbCubes[cubeArrPos] > 0)
+        {
+            yrbbCubes[cubeArrPos] = 0;
+            wasCubeRemoved = true;
+        }
+        else if (yrbbCubes[cubeArrPos] > 0)
         {
             yrbbCubes[cubeArrPos]--;
             wasCubeRemoved = true;
@@ -35,7 +39,25 @@ public class CityManager : MonoBehaviour
             wasCubeRemoved = false;
         }
 
+        yellowText.text = yrbbCubes[0].ToString();
+        redText.text = yrbbCubes[1].ToString();
+        blueText.text = yrbbCubes[2].ToString();
+        blackText.text = yrbbCubes[3].ToString();
+
         return wasCubeRemoved;
+    }
+
+    public void PlusCube(int cubeArrPos)
+    {
+        if (yrbbCubes[cubeArrPos] < 3)
+        {
+            yrbbCubes[cubeArrPos]++;
+        }
+
+        yellowText.text = yrbbCubes[0].ToString();
+        redText.text = yrbbCubes[1].ToString();
+        blueText.text = yrbbCubes[2].ToString();
+        blackText.text = yrbbCubes[3].ToString();
     }
 
     public void NewResearch()
